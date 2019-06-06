@@ -52,7 +52,13 @@ if ( isset($_GET['res']) ) {
   $message = '@' . $table['name'] . ' ' . $table['message'];
 }
 
+// htmlspecialcharsのショートカット
+function h($value) {
+  return htmlspecialchars($value, ENT_QUOTES);
+}
+
 ?>
+
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -77,8 +83,8 @@ if ( isset($_GET['res']) ) {
       <dl>
         <dt><?php echo htmlspecialchars($member['name'], ENT_QUOTES); ?>さん、メッセージをどうぞ</dt>
         <dd>
-          <textarea name="message" cols="50" rows="5"><?php if(isset($message)): echo htmlspecialchars($message, ENT_QUOTES); endif; ?></textarea>
-          <input type="hidden" name="reply_post_id" value="<?php echo htmlspecialchars($_GET['res'], ENT_QUOTES); ?>">
+          <textarea name="message" cols="50" rows="5"><?php if(isset($message)): echo h($message); endif; ?></textarea>
+          <input type="hidden" name="reply_post_id" value="<?php echo h($_GET['res']); ?>">
         </dd>
       </dl>
 
@@ -87,19 +93,19 @@ if ( isset($_GET['res']) ) {
 
     <?php foreach( $posts as $post ) : ?>
     <div class="msg">
-      <img src="member_picture/<?php echo htmlspecialchars($post['picture'], ENT_QUOTES); ?>" wudtg="48" height="48" alt="<?php echo htmlspecialchars($post['name'], ENT_QUOTES); ?>">
+      <img src="member_picture/<?php echo h($post['picture']); ?>" wudtg="48" height="48" alt="<?php echo h($post['name']); ?>">
       <p>
-        <?php echo htmlspecialchars($post['message'], ENT_QUOTES); ?>
-        <span class="name">(<?php echo htmlspecialchars($post['name'], ENT_QUOTES); ?>)</span>
-        [<a href="index.php?res=<?php echo htmlspecialchars($post['id'], ENT_QUOTES); ?>">Re</a>]
+        <?php echo h($post['message']); ?>
+        <span class="name">(<?php echo h($post['name']); ?>)</span>
+        [<a href="index.php?res=<?php echo h($post['id']); ?>">Re</a>]
       </p>
       <p class="day">
-        <a href="view.php?id=<?php echo htmlspecialchars($post['id'], ENT_QUOTES); ?>">
-          <?php echo htmlspecialchars($post['created'], ENT_QUOTES);  ?>
+        <a href="view.php?id=<?php echo h($post['id']); ?>">
+          <?php echo h($post['created']);  ?>
         </a>
         <?php if ($post['reply_post_id'] > 0): ?>
         |
-        <a href="view.php?id=<?php echo htmlspecialchars($post['reply_post_id'], ENT_QUOTES); ?>">
+        <a href="view.php?id=<?php echo h($post['reply_post_id']); ?>">
           返信元のメッセージへ
         </a>
         <?php endif; ?>
