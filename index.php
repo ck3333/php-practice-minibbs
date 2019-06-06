@@ -1,7 +1,6 @@
 <?php
-require('dbconnect.php');
-
 session_start();
+require('dbconnect.php');
 
 // ログインチェック：idがセッションに記録されている＆最後の行動から1時間以内
 if ( isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time() ) {
@@ -40,7 +39,6 @@ if (!empty($_POST)) {
     exit();
   }
 }
-
 
 // 投稿を取得する
 $posts = $db->query('SELECT m.name, m.picture, p.* FROM members m, posts p WHERE m.id=p.member_id ORDER BY p.created DESC');
@@ -95,7 +93,17 @@ if ( isset($_GET['res']) ) {
         <span class="name">(<?php echo htmlspecialchars($post['name'], ENT_QUOTES); ?>)</span>
         [<a href="index.php?res=<?php echo htmlspecialchars($post['id'], ENT_QUOTES); ?>">Re</a>]
       </p>
-      <p class="day"><?php echo htmlspecialchars($post['created'], ENT_QUOTES);  ?></p>
+      <p class="day">
+        <a href="view.php?id=<?php echo htmlspecialchars($post['id'], ENT_QUOTES); ?>">
+          <?php echo htmlspecialchars($post['created'], ENT_QUOTES);  ?>
+        </a>
+        <?php if ($post['reply_post_id'] > 0): ?>
+        |
+        <a href="view.php?id=<?php echo htmlspecialchars($post['reply_post_id'], ENT_QUOTES); ?>">
+          返信元のメッセージへ
+        </a>
+        <?php endif; ?>
+      </p>
     </div>
     <?php endforeach; ?>
 
